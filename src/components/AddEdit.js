@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from "react";
-import firebaseDb from "../firebase";
 import { useParams, useHistory } from "react-router-dom";
 import { isEmpty } from "lodash";
 import {useSelector, useDispatch} from "react-redux";
@@ -12,12 +11,13 @@ const AddEdit = () => {
     email: "",
     address: "",
   };
-  const [initialState, setState] = useState(values);
+  const [formValue, setFormValue] = useState(values);
+  const [editMode, setEditMode] = useState(false);
 
-  const {user: data} = useSelector(state => state.data);
+  const { contacts: data } = useSelector((state) => state.data);
   const dispatch = useDispatch();
 
-  const { fullName, mobile, email, address } = initialState;
+  const { fullName, mobile, email, address } = formValue;
 
   const currentId = useParams();
   const history = useHistory();
@@ -26,26 +26,40 @@ const AddEdit = () => {
 
   useEffect(() => {
     if (isEmpty(id)) {
-      setState({ ...values });
+      setFormValue({ ...values });
     } else {
-      setState({ ...data[id] });
+      setFormValue({ ...data[id] });
     }
   }, [id, data]);
 
-  const handleInputChange = (e) => {
+  const onChange = (e) => {
     let { name, value } = e.target;
-    setState({
-      ...initialState,
+    setFormValue({
+      ...formValue,
       [name]: value,
     });
   };
 
+  // useEffect(() => {
+  //   console.log("id", id);
+
+  //   if (id) {
+  //     setEditMode(true);
+  //     const singleUser = contacts.find((item) => item.id === Number(id));
+  //     setFormValue({ ...singleUser });
+  //   }
+  // }, [id]);
+
+  // const onChange = (e) => {
+  //   setFormValue({ ...formValue, [e.target.name]: e.target.value });
+  // };
+
   const handleSubmit = (e, obj) => {
     e.preventDefault();
     if (isEmpty(id)) {
-      dispatch(createUserStart(initialState))
+      dispatch(createUserStart(formValue))
     } else {
-      dispatch(updateUserStart({ initialState, id }));
+      dispatch(updateUserStart({ formValue, id }));
     }
     history.push("/");
   };
@@ -62,7 +76,7 @@ const AddEdit = () => {
                 className="form-control"
                 name="fullName"
                 value={fullName}
-                onChange={handleInputChange}
+                onChange={onChange}
               />
             </div>
             <div className="form-group">
@@ -72,7 +86,7 @@ const AddEdit = () => {
                 className="form-control"
                 name="mobile"
                 value={mobile}
-                onChange={handleInputChange}
+                onChange={onChange}
               />
             </div>
             <div className="form-group">
@@ -82,7 +96,7 @@ const AddEdit = () => {
                 className="form-control"
                 name="email"
                 value={email}
-                onChange={handleInputChange}
+                onChange={onChange}
               />
             </div>
             <div className="form-group">
@@ -92,7 +106,7 @@ const AddEdit = () => {
                 className="form-control"
                 name="address"
                 value={address}
-                onChange={handleInputChange}
+                onChange={onChange}
               />
             </div>
             <button className="btn btn-default">Cancel</button>

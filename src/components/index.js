@@ -5,7 +5,6 @@ import { getContactsStart, deleteUserStart } from "../redux/actions"
 
 const ListRecord = () => {
   const { contacts: data } = useSelector((state) => state.data);
-  console.log("data", data)
   let dispatch = useDispatch();
 
   useEffect(() => {

@@ -41,13 +41,12 @@ import {
     }
   }
 
-  function* onUpdateStartAsync({ payload }) {
+  function* onUpdateStartAsync({ payload: { id, formValue } }) {
     try {
-      console.log(payload);
-      // yield fireDb.child(`contacts/${id}`).set(userInfo);
-      // yield put(updateUserSuccess)
+      yield fireDb.child(`contacts/${id}`).set(formValue);
+      yield put(updateUserSuccess)
     } catch (error) {
-      // yield put(updateUserError(error));
+      yield put(updateUserError(error));
     }
   }
   
