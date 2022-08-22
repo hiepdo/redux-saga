@@ -1,26 +1,29 @@
-import React, { useEffect } from "react";
-import { Link } from "react-router-dom";
-import {useSelector, useDispatch} from "react-redux";
-import { getContactsStart, deleteUserStart } from "../redux/actions"
+import React, { useCallback, useState } from "react";
+import FilterRecord from "./editUsers";
+import { getUsers } from "./selector";
 
-const ListRecord = () => {
-  const { contacts: data } = useSelector((state) => state.data);
-  let dispatch = useDispatch();
+export const ListRecord = () => {
+    
+    const [name, setName] = useState("")
+    const onChange = (e) => {
+        let { value } = e.target;
+        setName(value);
+    };
 
-  useEffect(() => {
-    dispatch(getContactsStart());
-  }, [])
-  
-  const onDelete = (id) => {
-    if (window.confirm("Are you sure you want to delete this record ?")) {
-      dispatch(deleteUserStart(id));
-      dispatch(getContactsStart());
-    }
-  };
+    const filterName = useCallback((name) => {
+        return Object.fromEntries(Object.entries(getUsers).filter(([id]) => getUsers[id].fullName.include(name)))
+    }, [name]); 
 
   return (
     <>
       <div className="container-fluid mt-5">
+        <input
+            type="text"
+            className="form-control"
+            name="filterName"
+            value={name}
+            onChange={onChange}
+        />
         <div className="row">
           <div className="col-lg-12">
            
@@ -36,38 +39,20 @@ const ListRecord = () => {
                 </tr>
               </thead>
               <tbody>
-                {Object.keys(data).map((id, index) => {
+                {Object.keys(filterName).map((id, index) => {
                   return (
                     <tr key={id}>
                       <th scope="row">{index + 1}</th>
-                      <td>{data[id].fullName}</td>
-                      <td>{data[id].mobile}</td>
-                      <td>{data[id].email}</td>
-                      <td>{data[id].address}</td>
-                      <td>
-                        <Link to={`/update/${id}`}>
-                          <a className="btn text-primary">
-                            <i className="fas fa-pencil-alt" />
-                          </a>
-                        </Link>
-
-                        <a
-                          className="btn text-danger"
-                          onClick={() => onDelete(id)}
-                        >
-                          <i className="fas fa-trash-alt" />
-                        </a>
-                        <Link to={`/view/${id}`}>
-                          <a className="btn text-info">
-                            <i className="fas fa-eye" />
-                          </a>
-                        </Link>
-                      </td>
+                      <td>{filterName[id].fullName}</td>
+                      <td>{filterName[id].mobile}</td>
+                      <td>{filterName[id].email}</td>
+                      <td>{filterName[id].address}</td>
                     </tr>
                   );
                 })}
               </tbody>
             </table>
+            <FilterRecord />
           </div>
         </div>
       </div>

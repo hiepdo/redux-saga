@@ -12,7 +12,6 @@ const AddEdit = () => {
     address: "",
   };
   const [formValue, setFormValue] = useState(values);
-  const [editMode, setEditMode] = useState(false);
 
   const { contacts: data } = useSelector((state) => state.data);
   const dispatch = useDispatch();
@@ -39,20 +38,6 @@ const AddEdit = () => {
       [name]: value,
     });
   };
-
-  // useEffect(() => {
-  //   console.log("id", id);
-
-  //   if (id) {
-  //     setEditMode(true);
-  //     const singleUser = contacts.find((item) => item.id === Number(id));
-  //     setFormValue({ ...singleUser });
-  //   }
-  // }, [id]);
-
-  // const onChange = (e) => {
-  //   setFormValue({ ...formValue, [e.target.name]: e.target.value });
-  // };
 
   const handleSubmit = (e, obj) => {
     e.preventDefault();

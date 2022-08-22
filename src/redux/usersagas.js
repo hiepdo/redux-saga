@@ -27,7 +27,7 @@ import {
       } else {
         yield put(getContactsSuccess({}))
       }
-    } catch (error) {
+    } catch (error) { 
       yield put(getContactsError(error));
     }
   }
