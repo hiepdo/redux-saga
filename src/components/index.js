@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from "react";
+import React, { useEffect, useState } from "react";
 import FilterRecord from "./editUsers";
 import { createSelector } from "reselect";
 
@@ -14,7 +14,7 @@ export const ListRecord = () => {
         setName(value);
     };
 
-    const filterName = useCallback((name) => {
+    const filterName = useEffect((name) => {
         return Object.fromEntries(Object.entries(getUsers).filter(([id]) => getUsers[id].fullName.include(name)))
     }, [name]); 
 
