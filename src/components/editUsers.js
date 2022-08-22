@@ -2,7 +2,7 @@ import React, { useEffect } from "react";
 import { Link } from "react-router-dom";
 import {useDispatch} from "react-redux";
 import { getContactsStart, deleteUserStart } from "../redux/actions";
-import { getUsers } from "./selector";
+import { getUsers } from "./index";
 
 const FilterRecord = () => {
  

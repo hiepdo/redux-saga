@@ -1,6 +1,10 @@
 import React, { useCallback, useState } from "react";
 import FilterRecord from "./editUsers";
-import { getUsers } from "./selector";
+import { createSelector } from "reselect";
+
+const getContacts = (state) => state.data.contacts
+
+export const getUsers = createSelector(getContacts, contacts => contacts);
 
 export const ListRecord = () => {
     
